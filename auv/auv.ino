@@ -11,12 +11,12 @@ bool systemRunning = false;
 const int buttonPin = 11;
 
 Servo esc[4];
-int escPins[4] = {4, 5, 6, 7};
-//FORWARD: L = 4, R = 5
+int escPins[4] = {6, 7, 8, 9};
+//FORWARD: L = 8, R = 9
 //DOWN: L = 6, R = 7
 
 // Default throttle (SAFE START)
-int throttle[4] = {1100, 1100, 1100, 1100};
+int throttle[4] = {1270, 1270, 1100, 1100};
 
 #define COM 0x55
 

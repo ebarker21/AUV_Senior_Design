@@ -1,12 +1,12 @@
 // Uses motors to stay within a target range
 // Throttle 2(L) and 3(R) down
 void navigateZ(int motor, int distance, int targetDistance) {
-  double base = 1000;
-  double range = 1000;
+  double base = 1270;
+  double range = 730;
   double rate = 0.03;
   double dx = distance - targetDistance;
 
-  if (dx <= targetDistance) dx = 0;
+  if (dx < 0) dx = 0;
 
   double throttle = base + range * (1 - exp(-rate * dx));
 
@@ -16,10 +16,10 @@ void navigateZ(int motor, int distance, int targetDistance) {
 // Throttle 0(L) and 1(R) forward
 void navigateXY(int lMotor, int rMotor, int lSensor, int rSensor, int fSensor, int targetDistance) {
   // Checks front distance and steers away if within range
-  if (fSensor <= 100) {
-    if (lSensor <= 100) {
-      writeESC(lMotor, 1300);
-      writeESC(rMotor, 1000);
+  if (fSensor <= 1000) {
+    if (lSensor <= 200) {
+      writeESC(lMotor, 1000);
+      writeESC(rMotor, 1300);
     }
     else {
       writeESC(lMotor, 1000);

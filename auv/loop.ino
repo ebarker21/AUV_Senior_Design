@@ -19,10 +19,10 @@ void loop() {
   if (systemRunning) {
 
     // Read distance sensors
-    int d0 = readSensor(Serial1); //front sensor
-    int d1 = readSensor(Serial2); //bottom sensor
-    int d2 = readSensor(Serial3); //left sensor
-  //  int d3 = readSensor(Serial4); //TODO: right sensor
+    int d0 = readSensor(Serial1); //Bottom Sensor
+    int d1 = readSensor(Serial2); //Front Sensor
+    int d2 = readSensor(Serial3); //Right Sensor
+  //  int d3 = readSensor(Serial); //TODO: left sensor  MAXED AT 6.5 meters
 
     // Print results
     Serial.print("Dist: ");
@@ -57,9 +57,9 @@ void loop() {
         }
       }
     }
-    navigateZ(2, d0, 50);
-    navigateZ(3, d0, 50);
-    navigateXY(0, 1, d2, 1000, d1, 50); // Using 1000 for the right distance
+    navigateZ(2, d0, 150);
+    navigateZ(3, d0, 150);
+    navigateXY(0, 1, 1000, d2, d1, 150); // Using 1000 for the left distance
     delay(300);
   }
 }
