@@ -17,28 +17,20 @@ void navigateZ(int motor, int distance, int targetDistance) {
 void navigateXY(int lMotor, int rMotor, int lSensor, int rSensor, int fSensor, int targetDistance) {
   // Checks front distance and steers away if within range
   if (fSensor <= 1000) {
-    if (lSensor <= 200) {
-      writeESC(lMotor, 1000);
-      writeESC(rMotor, 1300);
-    }
-    else {
-      writeESC(lMotor, 1000);
-      writeESC(rMotor, 1300);
-    }
+    writeESC(lMotor, 1000);
+    writeESC(rMotor, 1300);
   }
   // Steering along the Left Wall
-  if (lSensor < targetDistance && rSensor > targetDistance) {
+  else if (lSensor < targetDistance && rSensor > targetDistance) {
     writeESC(lMotor, 1200);
     writeESC(rMotor, 1100);
-  } else {
-    writeESC(lMotor, 1100);
-    writeESC(rMotor, 1200);
   }
   // Steering along the Right Wall
-  if (rSensor < targetDistance && lSensor > targetDistance) {
+  else if (rSensor < targetDistance && lSensor > targetDistance) {
     writeESC(lMotor, 1200);
     writeESC(rMotor, 1100);
-  } else {
+  }
+  else {
     writeESC(lMotor, 1100);
     writeESC(rMotor, 1200);
   }
