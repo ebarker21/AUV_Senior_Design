@@ -16,19 +16,40 @@ void loop() {
     delay(1000);
   }
 
+  // For testing purposes
+  // EXAMPLE: "Send: 1200,1300,1400,1500
+  if (Serial.available()) {
+
+    String input = Serial.readStringUntil('\n');
+
+    int t1, t2, t3, t4;
+
+    if (sscanf(input.c_str(), "%d,%d,%d,%d", &t1, &t2, &t3, &t4) == 4) {
+
+      throttle[0] = constrain(t1, 1000, 2000);
+      throttle[1] = constrain(t2, 1000, 2000);
+      throttle[2] = constrain(t3, 1000, 2000);
+      throttle[3] = constrain(t4, 1000, 2000);
+
+      for (int i = 0; i < 4; i++) {
+        writeESC(i, throttle[i]);  // FIXED BUG HERE
+      }
+    }
+  }
+
   if (systemRunning) {
 
     // Read distance sensors
-    int d0 = readSensor(Serial1); //Bottom Sensor
-    int d1 = readSensor(Serial2); //Front Sensor
-    int d2 = readSensor(Serial3); //Right Sensor
-  //  int d3 = readSensor(Serial); //TODO: left sensor  MAXED AT 6.5 meters
+    int bottomSense = readSensor(Serial1);
+    int frontSense = readSensor(Serial2);
+    int rightSense = readSensor(Serial3);
+    int leftSense = 1000; //TODO install Left Sensor
 
     // Print results
     Serial.print("Dist: ");
-    Serial.print("Front: "); Serial.print(d0); Serial.print("  ");
-    Serial.print("Bottom: "); Serial.print(d1); Serial.print("  ");
-    Serial.print("Left: "); Serial.print(d2); Serial.print("   |   ");
+    Serial.print("Front: "); Serial.print(frontSense); Serial.print("  ");
+    Serial.print("Bottom: "); Serial.print(bottomSense); Serial.print("  ");
+    Serial.print("Right: "); Serial.print(rightSense); Serial.print("   |   ");
 
     readMPU();
 
@@ -37,29 +58,9 @@ void loop() {
     Serial.print("Roll: "); Serial.print(GyY); Serial.print("  ");
     Serial.print("Yaw: "); Serial.print(GyZ); Serial.print("   |   ");
 
-  // For testing purposes
-  // EXAMPLE: "Send: 1200,1300,1400,1500
-    if (Serial.available()) {
-
-      String input = Serial.readStringUntil('\n');
-
-      int t1, t2, t3, t4;
-
-      if (sscanf(input.c_str(), "%d,%d,%d,%d", &t1, &t2, &t3, &t4) == 4) {
-
-        throttle[0] = constrain(t1, 1000, 2000);
-        throttle[1] = constrain(t2, 1000, 2000);
-        throttle[2] = constrain(t3, 1000, 2000);
-        throttle[3] = constrain(t4, 1000, 2000);
-
-        for (int i = 0; i < 4; i++) {
-          writeESC(i, throttle[i]);  // FIXED BUG HERE
-        }
-      }
-    }
-    navigateZ(2, d0, 150);
-    navigateZ(3, d0, 150);
-    navigateXY(0, 1, 1000, d2, d1, 150); // Using 1000 for the left distance
+    navigateZ(downLeftMotor, bottomSense, targetDepth);
+    navigateZ(downRightMotor, bottomSense, targetDepth);
+    navigateXY(frontLeftMotor, frontRightMotor, leftSense, rightSense, frontSense, frontGap, wallGap); // Using 1000 for the left distance
     delay(300);
   }
 }

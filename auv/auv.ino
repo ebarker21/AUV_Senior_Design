@@ -10,13 +10,25 @@ bool systemRunning = false;
 // Power Button pin
 const int buttonPin = 11;
 
+// Target Distances
+int targetDepth = 150;
+int wallGap = 150;
+int frontGap = 1000;
+
+// ----- MOTORS -----
 Servo esc[4];
 int escPins[4] = {6, 7, 8, 9};
+
 //FORWARD: L = 8, R = 9
 //DOWN: L = 6, R = 7
 
+int downLeftMotor = 0;
+int downRightMotor = 1;
+int frontLeftMotor = 2;
+int frontRightMotor = 3;
+
 // Default throttle (SAFE START)
-int throttle[4] = {1270, 1270, 1100, 1100};
+int throttle[4] = {1000, 1000, 1000, 1000};
 
 #define COM 0x55
 

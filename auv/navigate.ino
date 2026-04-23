@@ -14,24 +14,36 @@ void navigateZ(int motor, int distance, int targetDistance) {
 }
 
 // Throttle 0(L) and 1(R) forward
-void navigateXY(int lMotor, int rMotor, int lSensor, int rSensor, int fSensor, int targetDistance) {
+void navigateXY(int lMotor, int rMotor, int lSensor, int rSensor, int fSensor, int frontDistance, int targetDistance) {
+  int turnThrottle = 1300;
+  int adjustThrottle = 1200;
+  int cruiseThrottle = 1100;
+  int idleThrottle = 1000;
   // Checks front distance and steers away if within range
-  if (fSensor <= 1000) {
-    writeESC(lMotor, 1000);
-    writeESC(rMotor, 1300);
+  if (fSensor < frontDistance) {
+    if (lSensor <= (targetDistance+100)) {
+      writeESC(lMotor, idleThrottle);
+      writeESC(rMotor, turnThrottle);
+    }
+    else {
+      writeESC(lMotor, turnThrottle);
+      writeESC(rMotor, idleThrottle);
+    }
   }
   // Steering along the Left Wall
-  else if (lSensor < targetDistance && rSensor > targetDistance) {
-    writeESC(lMotor, 1200);
-    writeESC(rMotor, 1100);
+  if (lSensor < targetDistance && rSensor > targetDistance) {
+    writeESC(lMotor, adjustThrottle);
+    writeESC(rMotor, cruiseThrottle);
+  } else {
+    writeESC(lMotor, cruiseThrottle);
+    writeESC(rMotor, adjustThrottle);
   }
   // Steering along the Right Wall
-  else if (rSensor < targetDistance && lSensor > targetDistance) {
-    writeESC(lMotor, 1200);
-    writeESC(rMotor, 1100);
-  }
-  else {
-    writeESC(lMotor, 1100);
-    writeESC(rMotor, 1200);
+  if (rSensor < targetDistance && lSensor > targetDistance) {
+    writeESC(lMotor, cruiseThrottle);
+    writeESC(rMotor, adjustThrottle);
+  } else {
+    writeESC(lMotor, adjustThrottle);
+    writeESC(rMotor, cruiseThrottle);
   }
 }
